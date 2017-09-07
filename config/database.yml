@@ -17,16 +17,24 @@
 default: &default
   adapter: postgresql
   encoding: unicode
+  # localhost setup
   username: postgres
   password: neel
   host: localhost
+
+  # heroku setup
+  # username: nxyqtzcqtnmxjd
+  # password: c0ffd9a9c079113267b7c69f54a838890ae91e068e9d7315e45c00b34d68c23c
+  # host: ec2-107-22-171-11.compute-1.amazonaws.com
+  # port: 5432
   # For details on connection pooling, see rails configuration guide
   # http://guides.rubyonrails.org/configuring.html#database-pooling
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 
 development:
   <<: *default
-  database: patient-curd_development
+  database: patient-app
+  # database: did2bqd9ldnfg
 
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
