@@ -7,11 +7,22 @@ class PatientsDisplay extends React.Component {
   constructor () {
     super();
     this.state = {
+      quote: {}
     };
   }
 
-  componentDidMount () {
+  fetchPatients (id) {
+    axios.get( `http://localhost:3000/api/v1/patients/` )
+        .then(response => {
+          console.log(response);
+        })
+        .catch(error => {
+          console.error(error);
+        });
+  }
 
+  componentDidMount () {
+    this.fetchPatients();
   }
 
   componentWillReceiveProps (nextProps) {
