@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import queryString from 'query-string';
 import axios from 'axios';
+import constants from './../common/constants'
 
 class PatientsDisplay extends React.Component {
   constructor () {
@@ -12,7 +13,7 @@ class PatientsDisplay extends React.Component {
   }
 
   fetchPatients (id) {
-    axios.get( `http://localhost:3000/api/v1/patients/` )
+    axios.get( `${constants.apiEndpoint}/patients/` )
         .then(response => {
           console.log(response);
         })
