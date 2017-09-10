@@ -6,8 +6,15 @@ import constants from './../common/constants'
 import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table'
 import { Container, Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, FormText } from 'reactstrap'
 import { reduxForm, Field } from 'redux-form'
+import { Alert } from 'reactstrap';
 
 import Header from './Header'
+
+const renderTextField = ({
+  input,
+  label,
+}) =>
+  <Input type="text" name={label} id={label} placeholder={label} {...input}/>
 
 class PatientsDisplay extends React.Component {
   constructor(props) {
@@ -15,16 +22,21 @@ class PatientsDisplay extends React.Component {
     this.state = {
       modal: false,
       patients: [],
-      mrn: null
+      visible: false
     };
 
     this.toggle = this.toggle.bind(this);
+    this.onDismiss = this.onDismiss.bind(this);
   }
 
   toggle() {
     this.setState({
       modal: !this.state.modal
     });
+  }
+
+  onDismiss() {
+    this.setState({ visible: false });
   }
 
   fetchPatients (id) {
@@ -54,16 +66,22 @@ class PatientsDisplay extends React.Component {
     )
   }
 
-  onAfterInsertRow(row) {
-    console.log(row);
-  }
-
-  addPatient= () => {
-
- }
-
- submit= (values) =>{
-   console.log('values', values);
+ submit= (data) =>{
+   axios.post( `${constants.apiEndpoint}/patients/`, data )
+       .then(response => {
+         if (response.status === 200) {
+           var oldPatients = this.state.patients;
+           var newPatients = oldPatients.concat(response.data.data);
+            this.setState({
+              patients : newPatients,
+              visible: true
+            })
+            this.toggle();
+         }
+       })
+       .catch(error => {
+         console.error(error);
+       });
  }
 
   createCustomButtonGroup = (props) => {
@@ -73,7 +91,6 @@ class PatientsDisplay extends React.Component {
       <ButtonGroup sizeClass='btn-group-md'>
         <Button color="primary" onClick={() => {this.toggle()}}>
           <span className="glyphicon glyphicon-plus" aria-hidden="true"></span>{' '}
-          {/* <Icon name="download" />{' '} */}
           New Patient
         </Button>
       </ButtonGroup>
@@ -85,22 +102,22 @@ class PatientsDisplay extends React.Component {
           <FormGroup>
             <ModalBody>
                   <Label for="mrn">MRN</Label>
-                  <Field name="mrn" component="input"/>
+                  <Field name="mrn" component={renderTextField} label="MRN" />
                   {/* <Input type="text" name="mrn" id="mrn" placeholder="MRN"/> */}
                   <Label for="f_name">First Name</Label>
-                  <Field name="f_name" component="input" />
+                  <Field name="first_name" component={renderTextField} label="First Name" />
                   {/* <Input type="text" name="f_name" id="f_name" placeholder="First Name" /> */}
                   <Label for="m_name">Middle Name</Label>
-                  <Field name="m_name" component="input" />
+                  <Field name="middle_name" component={renderTextField} label="Middle Name" />
                   {/* <Input type="text" name="m_name" id="m_name" placeholder="Middle Name" /> */}
                   <Label for="l_name">Last Name</Label>
-                  <Field name="l_name" component="input" />
+                  <Field name="last_name" component={renderTextField} label="Last Name" />
                   {/* <Input type="text" name="l_name" id="l_name" placeholder="Last Name" /> */}
                   <Label for="weight">Weight</Label>
-                  <Field name="weight" component="input" />
+                  <Field name="weight" component={renderTextField} label="Weight" />
                   {/* <Input type="text" name="weight" id="weight" placeholder="Weight" /> */}
                   <Label for="height">Height</Label>
-                  <Field name="height" component="input" />
+                  <Field name="height" component={renderTextField} label="Height" />
                   {/* <Input type="text" name="height" id="height" placeholder="Height" /> */}
             </ModalBody>
             <ModalFooter>
@@ -114,10 +131,6 @@ class PatientsDisplay extends React.Component {
     )
   }
 
-  onRowClick = (row) => {
-    this.props.actions.select(row.transaction)
-  }
-
   render () {
     const options = {
       afterInsertRow: this.onAfterInsertRow,  // A hook for after insert rows
@@ -127,6 +140,13 @@ class PatientsDisplay extends React.Component {
     return (
       <div>
         <Header />
+        {
+          this.state.visible ?
+          <Alert color="success" isOpen={this.state.visible} toggle={this.onDismiss}>
+            New Patient added!
+          </Alert> :
+          null
+        }
         <BootstrapTable data={this.state.patients} striped hover
                         options={ options }>
             <TableHeaderColumn isKey hidden dataField='id'>Patient ID</TableHeaderColumn>
