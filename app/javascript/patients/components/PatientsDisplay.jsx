@@ -22,7 +22,8 @@ class PatientsDisplay extends React.Component {
     this.state = {
       modal: false,
       patients: [],
-      visible: false
+      visible: false,
+      deletePatient: false
     };
 
     this.toggle = this.toggle.bind(this);
@@ -36,7 +37,10 @@ class PatientsDisplay extends React.Component {
   }
 
   onDismiss() {
-    this.setState({ visible: false });
+    this.setState({
+      visible: false,
+      deletePatient: false
+   });
   }
 
   fetchPatients (id) {
@@ -45,6 +49,36 @@ class PatientsDisplay extends React.Component {
           this.setState({
             patients : response.data.data
           })
+          // console.log(response);
+        })
+        .catch(error => {
+          console.error(error);
+        });
+  }
+
+
+  componentDidMount () {
+    this.fetchPatients();
+  }
+
+  handleClick = (e, row) => {
+    e.preventDefault();
+    this.delete(row);
+  }
+
+  delete= (row) => {
+    let patientId = row.id;
+    axios.delete( `${constants.apiEndpoint}/patients/${patientId}` )
+        .then(response => {
+          if (response.status === 200) {
+            let newPatients = this.state.patients;
+            let index = newPatients.indexOf(row);
+            newPatients.splice(index,1);
+             this.setState({
+               patients : newPatients,
+               deletePatient: true
+             })
+          }
           console.log(response);
         })
         .catch(error => {
@@ -52,16 +86,12 @@ class PatientsDisplay extends React.Component {
         });
   }
 
-  componentDidMount () {
-    this.fetchPatients();
-  }
-
   buttonFormatter(cell, row){
     return(
       <div>
         <Button color="primary">Show</Button>{' '}
         <Button color="warning">Edit</Button>{' '}
-        <Button color="danger">Destroy</Button>{' '}
+        <Button color="danger" onClick={(e) => this.handleClick(e, row)}>Destroy</Button>{' '}
       </div>
     )
   }
@@ -147,13 +177,20 @@ class PatientsDisplay extends React.Component {
           </Alert> :
           null
         }
+        {  
+          this.state.deletePatient ?
+          <Alert color="success" isOpen={this.state.deletePatient} toggle={this.onDismiss}>
+            Patient deleted!
+          </Alert> :
+          null
+        }
         <BootstrapTable data={this.state.patients} striped hover
                         options={ options }>
             <TableHeaderColumn isKey hidden dataField='id'>Patient ID</TableHeaderColumn>
             <TableHeaderColumn dataField='mrn'>MRN</TableHeaderColumn>
             <TableHeaderColumn dataField='first_name'>First Name</TableHeaderColumn>
             <TableHeaderColumn dataField='last_name'>Last Name</TableHeaderColumn>
-            <TableHeaderColumn dataFormat={this.buttonFormatter}>Action</TableHeaderColumn>
+            <TableHeaderColumn dataFormat={this.buttonFormatter.bind(this)}>Action</TableHeaderColumn>
             <TableHeaderColumn hidden dataField='weight'>Weight</TableHeaderColumn>
             <TableHeaderColumn hidden dataField='height'>Height</TableHeaderColumn>
         </BootstrapTable>
