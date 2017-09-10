@@ -89,7 +89,7 @@ class PatientsDisplay extends React.Component {
   buttonFormatter(cell, row){
     return(
       <div>
-        <Button color="primary">Show</Button>{' '}
+        <Link to={`/patients/${row.id}`}><Button color="primary">Show</Button></Link>{' '}
         <Button color="warning">Edit</Button>{' '}
         <Button color="danger" onClick={(e) => this.handleClick(e, row)}>Destroy</Button>{' '}
       </div>
@@ -119,7 +119,7 @@ class PatientsDisplay extends React.Component {
     return (
       <div>
       <ButtonGroup sizeClass='btn-group-md'>
-        <Button color="primary" onClick={() => {this.toggle()}}>
+        <Button color="info" onClick={() => {this.toggle()}}>
           <span className="glyphicon glyphicon-plus" aria-hidden="true"></span>{' '}
           New Patient
         </Button>
@@ -177,7 +177,7 @@ class PatientsDisplay extends React.Component {
           </Alert> :
           null
         }
-        {  
+        {
           this.state.deletePatient ?
           <Alert color="success" isOpen={this.state.deletePatient} toggle={this.onDismiss}>
             Patient deleted!
