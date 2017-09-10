@@ -5,24 +5,23 @@ import axios from 'axios'
 import constants from './../common/constants'
 import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table'
 import { Container, Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, FormText } from 'reactstrap'
-import PropTypes from 'prop-types'
+import { reduxForm, Field } from 'redux-form'
 
 import Header from './Header'
-// import PatientModal from './PatientModal'
 
 class PatientsDisplay extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       modal: false,
-      patients: []
+      patients: [],
+      mrn: null
     };
 
     this.toggle = this.toggle.bind(this);
   }
 
   toggle() {
-    console.log('yes');
     this.setState({
       modal: !this.state.modal
     });
@@ -45,10 +44,6 @@ class PatientsDisplay extends React.Component {
     this.fetchPatients();
   }
 
-  createPatient(){
-
-  }
-
   buttonFormatter(cell, row){
     return(
       <div>
@@ -63,41 +58,57 @@ class PatientsDisplay extends React.Component {
     console.log(row);
   }
 
+  addPatient= () => {
+
+ }
+
+ submit= (values) =>{
+   console.log('values', values);
+ }
+
   createCustomButtonGroup = (props) => {
+    const { handleSubmit } = this.props;
     return (
       <div>
       <ButtonGroup sizeClass='btn-group-md'>
         <Button color="primary" onClick={() => {this.toggle()}}>
+          <span className="glyphicon glyphicon-plus" aria-hidden="true"></span>{' '}
           {/* <Icon name="download" />{' '} */}
           New Patient
         </Button>
       </ButtonGroup>
-      <Modal isOpen={this.state.modal} toggle={this.toggle}>
+      <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className} style={styles.modal}>
         <ModalHeader toggle={this.toggle}>
-          Modal title
+          New Patient
         </ModalHeader>
-        <ModalBody>
-          <Form>
-            <FormGroup>
-              <Label for="mrn">MRN</Label>
-              <Input type="text" name="mrn" id="mrn" placeholder="MRN" />
-              <Label for="f_name">First Name</Label>
-              <Input type="text" name="f_name" id="f_name" placeholder="First Name" />
-              <Label for="m_name">Middle Name</Label>
-              <Input type="text" name="m_name" id="m_name" placeholder="Middle Name" />
-              <Label for="l_name">Last Name</Label>
-              <Input type="text" name="l_name" id="l_name" placeholder="Last Name" />
-              <Label for="weight">Weight</Label>
-              <Input type="text" name="weight" id="weight" placeholder="Weight" />
-              <Label for="height">Height</Label>
-              <Input type="text" name="height" id="height" placeholder="Height" />
-            </FormGroup>
-          </Form>
-        </ModalBody>
-        <ModalFooter>
-          <Button color="primary" onClick={this.toggle}>Do Something</Button>{' '}
-          <Button color="secondary" onClick={this.toggle}>Cancel</Button>
-        </ModalFooter>
+        <Form onSubmit={ handleSubmit(this.submit.bind(this)) }>
+          <FormGroup>
+            <ModalBody>
+                  <Label for="mrn">MRN</Label>
+                  <Field name="mrn" component="input"/>
+                  {/* <Input type="text" name="mrn" id="mrn" placeholder="MRN"/> */}
+                  <Label for="f_name">First Name</Label>
+                  <Field name="f_name" component="input" />
+                  {/* <Input type="text" name="f_name" id="f_name" placeholder="First Name" /> */}
+                  <Label for="m_name">Middle Name</Label>
+                  <Field name="m_name" component="input" />
+                  {/* <Input type="text" name="m_name" id="m_name" placeholder="Middle Name" /> */}
+                  <Label for="l_name">Last Name</Label>
+                  <Field name="l_name" component="input" />
+                  {/* <Input type="text" name="l_name" id="l_name" placeholder="Last Name" /> */}
+                  <Label for="weight">Weight</Label>
+                  <Field name="weight" component="input" />
+                  {/* <Input type="text" name="weight" id="weight" placeholder="Weight" /> */}
+                  <Label for="height">Height</Label>
+                  <Field name="height" component="input" />
+                  {/* <Input type="text" name="height" id="height" placeholder="Height" /> */}
+            </ModalBody>
+            <ModalFooter>
+              <Button color="primary" type="submit">Add</Button>{' '}
+              <Button color="secondary" onClick={this.toggle}>Cancel</Button>
+            </ModalFooter>
+          </FormGroup>
+        </Form>
       </Modal>
       </div>
     )
@@ -116,7 +127,6 @@ class PatientsDisplay extends React.Component {
     return (
       <div>
         <Header />
-        <Container>
         <BootstrapTable data={this.state.patients} striped hover
                         options={ options }>
             <TableHeaderColumn isKey hidden dataField='id'>Patient ID</TableHeaderColumn>
@@ -127,10 +137,24 @@ class PatientsDisplay extends React.Component {
             <TableHeaderColumn hidden dataField='weight'>Weight</TableHeaderColumn>
             <TableHeaderColumn hidden dataField='height'>Height</TableHeaderColumn>
         </BootstrapTable>
-      </Container>
       </div>
     );
   }
 }
 
-export default PatientsDisplay;
+const styles={
+  modal:{
+    display: 'block',
+    paddingRight: '17px',
+    marginTop: '200px'
+  }
+};
+
+const mapStateToProps = (state, ownProps) => {
+  console.log(state); // state
+  console.log(ownProps); // ownProps
+}
+
+export default reduxForm({
+  form: 'PatientsDisplay'
+})(PatientsDisplay);
