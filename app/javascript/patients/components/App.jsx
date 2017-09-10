@@ -4,14 +4,16 @@ import {
   Route
 } from 'react-router-dom'
 import PatientsDisplay from './PatientsDisplay'
+import PatientDetails from './PatientDetails';
 
 const App = (props) => (
   <Router>
     <div>
       <Route
-        path='/'
+        exact path='/'
         component={PatientsDisplay}
       />
+      <Route path='/patients/:number' component={PatientDetails} />
     </div>
   </Router>
 )
