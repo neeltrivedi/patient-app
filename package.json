@@ -13,8 +13,11 @@
     "react-addons-transition-group": "^15.6.0",
     "react-bootstrap-table": "^4.0.3",
     "react-dom": "^15.6.1",
+    "react-redux": "^5.0.6",
     "react-router-dom": "^4.2.2",
-    "reactstrap": "^4.8.0"
+    "reactstrap": "^4.8.0",
+    "redux": "^3.7.2",
+    "redux-form": "^7.0.4"
   },
   "devDependencies": {
     "webpack-dev-server": "^2.7.1"
