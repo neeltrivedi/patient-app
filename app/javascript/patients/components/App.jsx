@@ -5,6 +5,7 @@ import {
 } from 'react-router-dom'
 import PatientsDisplay from './PatientsDisplay'
 import PatientDetails from './PatientDetails';
+import EncounterDetails from './EncounterDetails';
 
 const App = (props) => (
   <Router>
@@ -13,7 +14,8 @@ const App = (props) => (
         exact path='/'
         component={PatientsDisplay}
       />
-      <Route path='/patients/:number' component={PatientDetails} />
+      <Route exact path='/patients/:number' component={PatientDetails} />
+      <Route exact path='/patients/:number/encounters/:encounterId' component={EncounterDetails} />
     </div>
   </Router>
 )
