@@ -60,7 +60,7 @@ class PatientDetails extends React.Component {
           this.setState({
             patientDetails : response.data.data
           })
-          console.log(response);
+          // console.log(response);
         })
         .catch(error => {
           console.error(error);
@@ -73,7 +73,7 @@ class PatientDetails extends React.Component {
           this.setState({
             patientEncounters : response.data.data
           })
-          console.log(response);
+          // console.log(response);
         })
         .catch(error => {
           console.error(error);
@@ -98,7 +98,7 @@ class PatientDetails extends React.Component {
                deleteEncounter: true
              })
           }
-          console.log(response);
+          // console.log(response);
         })
         .catch(error => {
           console.error(error);
@@ -108,7 +108,7 @@ class PatientDetails extends React.Component {
   buttonFormatter(cell, row){
     return(
       <div>
-        <Link to={`/patients/${row.id}`}><Button color="primary">Show</Button></Link>{' '}
+        <Link to={`/patients/${this.state.patientId}/encounters/${row.id}`}><Button color="primary">Show</Button></Link>{' '}
         <Button color="warning">Edit</Button>{' '}
         <Button color="danger" onClick={(e) => this.handleClick(e, row)}>Destroy</Button>{' '}
       </div>
@@ -185,7 +185,7 @@ class PatientDetails extends React.Component {
     return (
       <div>
         <Header />
-        <Button color="link">Back</Button>{' '}
+        <Link to={'/'}><Button color="link">Back</Button></Link>{' '}
         {
           this.state.visible ?
           <Alert color="success" isOpen={this.state.visible} toggle={this.onDismiss}>
