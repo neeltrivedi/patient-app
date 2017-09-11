@@ -4,6 +4,7 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, La
 import constants from './../common/constants'
 import axios from 'axios'
 import { reduxForm, Field } from 'redux-form'
+import Loading from 'react-loading-animation'
 
 import Header from './Header'
 var patientDetails;
@@ -23,7 +24,9 @@ class PatientDetails extends React.Component {
       patientDetails: null,
       modal: false,
       visible: false,
-      deleteEncounter: false
+      deleteEncounter: false,
+      isLoadingPatient: true,
+      isLoadingEncounter: true
     };
 
     this.toggle = this.toggle.bind(this);
@@ -58,7 +61,8 @@ class PatientDetails extends React.Component {
         .then(response => {
           patientDetails = response.data.data;
           this.setState({
-            patientDetails : response.data.data
+            patientDetails : response.data.data,
+            isLoadingPatient: false
           })
           // console.log(response);
         })
@@ -71,7 +75,8 @@ class PatientDetails extends React.Component {
     axios.get( `${constants.apiEndpoint}/patients/${id}/encounters/` )
         .then(response => {
           this.setState({
-            patientEncounters : response.data.data
+            patientEncounters : response.data.data,
+            isLoadingEncounter: false
           })
           // console.log(response);
         })
@@ -200,50 +205,56 @@ class PatientDetails extends React.Component {
           </Alert> :
           null
         }
-        <Form>
-          <Row>
-            <Col>
-              <center><h1>Patient Details</h1></center>
-            </Col>
-          </Row>
-          <Row>
-            <Col xs="6">
-              <FormGroup>
-                <Label for="patientid">Patient Id</Label>
-                  <Input static>{patientDetails.id}</Input>
-              </FormGroup>
-            </Col>
-            <Col xs="6">
-              <FormGroup>
-                <Label for="name">Name</Label>
-                <Input static>{patientDetails.first_name} {patientDetails.middle_name} {patientDetails.last_name} </Input>
-              </FormGroup>
-            </Col>
-          </Row>
-          <Row>
+        {
+          this.state.isLoadingPatient && this.state.isLoadingEncounter ?
+          <Loading /> :
+          <div>
+          <Form>
+            <Row>
+              <Col>
+                <center><h1>Patient Details</h1></center>
+              </Col>
+            </Row>
+            <Row>
               <Col xs="6">
                 <FormGroup>
-                  <Label for="weight">Weight</Label>
-                  <Input static>{patientDetails.weight}</Input>
+                  <Label for="patientid">Patient Id</Label>
+                    <Input static>{patientDetails.id}</Input>
                 </FormGroup>
               </Col>
               <Col xs="6">
                 <FormGroup>
-                  <Label for="height">Height</Label>
-                  <Input static>{patientDetails.height} </Input>
+                  <Label for="name">Name</Label>
+                  <Input static>{patientDetails.first_name} {patientDetails.middle_name} {patientDetails.last_name} </Input>
                 </FormGroup>
               </Col>
-          </Row>
-        </Form>
+            </Row>
+            <Row>
+                <Col xs="6">
+                  <FormGroup>
+                    <Label for="weight">Weight</Label>
+                    <Input static>{patientDetails.weight}</Input>
+                  </FormGroup>
+                </Col>
+                <Col xs="6">
+                  <FormGroup>
+                    <Label for="height">Height</Label>
+                    <Input static>{patientDetails.height} </Input>
+                  </FormGroup>
+                </Col>
+            </Row>
+          </Form>
 
-        <BootstrapTable data={this.state.patientEncounters} striped hover
-                        options={ options }>
-            <TableHeaderColumn isKey hidden dataField='id'>Encounter ID</TableHeaderColumn>
-            <TableHeaderColumn dataField='visit_number'>Visit Number</TableHeaderColumn>
-            <TableHeaderColumn dataField='admitted_at'>Admitted At</TableHeaderColumn>
-            <TableHeaderColumn dataField='discharged_at'>Discharged At</TableHeaderColumn>
-            <TableHeaderColumn dataFormat={this.buttonFormatter.bind(this)}>Action</TableHeaderColumn>
-        </BootstrapTable>
+          <BootstrapTable data={this.state.patientEncounters} striped hover
+                          options={ options }>
+              <TableHeaderColumn isKey hidden dataField='id'>Encounter ID</TableHeaderColumn>
+              <TableHeaderColumn dataField='visit_number'>Visit Number</TableHeaderColumn>
+              <TableHeaderColumn dataField='admitted_at'>Admitted At</TableHeaderColumn>
+              <TableHeaderColumn dataField='discharged_at'>Discharged At</TableHeaderColumn>
+              <TableHeaderColumn dataFormat={this.buttonFormatter.bind(this)}>Action</TableHeaderColumn>
+          </BootstrapTable>
+          </div>
+        }
       </div>
     );
   }

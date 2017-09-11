@@ -4,9 +4,9 @@ import queryString from 'query-string'
 import axios from 'axios'
 import constants from './../common/constants'
 import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table'
-import { Container, Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, FormText } from 'reactstrap'
+import { Container, Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, FormText, Alert } from 'reactstrap'
 import { reduxForm, Field } from 'redux-form'
-import { Alert } from 'reactstrap';
+import Loading from 'react-loading-animation'
 
 import Header from './Header'
 
@@ -23,7 +23,8 @@ class PatientsDisplay extends React.Component {
       modal: false,
       patients: [],
       visible: false,
-      deletePatient: false
+      deletePatient: false,
+      isLoading: true
     };
 
     this.toggle = this.toggle.bind(this);
@@ -47,7 +48,8 @@ class PatientsDisplay extends React.Component {
     axios.get( `${constants.apiEndpoint}/patients/` )
         .then(response => {
           this.setState({
-            patients : response.data.data
+            patients : response.data.data,
+            isLoading: false
           })
           // console.log(response);
         })
@@ -184,16 +186,20 @@ class PatientsDisplay extends React.Component {
           </Alert> :
           null
         }
-        <BootstrapTable data={this.state.patients} striped hover
-                        options={ options }>
-            <TableHeaderColumn isKey hidden dataField='id'>Patient ID</TableHeaderColumn>
-            <TableHeaderColumn dataField='mrn'>MRN</TableHeaderColumn>
-            <TableHeaderColumn dataField='first_name'>First Name</TableHeaderColumn>
-            <TableHeaderColumn dataField='last_name'>Last Name</TableHeaderColumn>
-            <TableHeaderColumn dataFormat={this.buttonFormatter.bind(this)}>Action</TableHeaderColumn>
-            <TableHeaderColumn hidden dataField='weight'>Weight</TableHeaderColumn>
-            <TableHeaderColumn hidden dataField='height'>Height</TableHeaderColumn>
-        </BootstrapTable>
+        {
+          this.state.isLoading ?
+          <Loading />:
+          <BootstrapTable data={this.state.patients} striped hover
+                          options={ options }>
+              <TableHeaderColumn isKey hidden dataField='id'>Patient ID</TableHeaderColumn>
+              <TableHeaderColumn dataField='mrn'>MRN</TableHeaderColumn>
+              <TableHeaderColumn dataField='first_name'>First Name</TableHeaderColumn>
+              <TableHeaderColumn dataField='last_name'>Last Name</TableHeaderColumn>
+              <TableHeaderColumn dataFormat={this.buttonFormatter.bind(this)}>Action</TableHeaderColumn>
+              <TableHeaderColumn hidden dataField='weight'>Weight</TableHeaderColumn>
+              <TableHeaderColumn hidden dataField='height'>Height</TableHeaderColumn>
+          </BootstrapTable>
+        }
       </div>
     );
   }
