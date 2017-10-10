@@ -7,8 +7,9 @@ module Api
       end
 
       def show
-        patient =  Patient.find(params[:id])
-        render json: {status: 'SUCCESS', message:'Loaded Patient', data: patient},status: :ok
+        result = FindPatient.call({id: params[:id]})
+        # patient =  Patient.find(params[:id])
+        render json: {status: 'SUCCESS', message:'Loaded Patient', data: result.patient},status: :ok
       end
 
       def create
@@ -19,16 +20,17 @@ module Api
         else
           render json: {status: 'ERROR', message:'Not able to save Patient', data: patient.errors},status: :unprocessable_entity
         end
-
       end
 
       def destroy
-        patient =  Patient.find(params[:id])
-        patient.destroy
-        render json: {status: 'SUCCESS', message:'Deleted Patient', data: patient},status: :ok
+        result = FindPatient.call({id: params[:id]})
+        # patient =  Patient.find(params[:id])
+        result.patient.destroy
+        render json: {status: 'SUCCESS', message:'Deleted Patient', data: result.patient},status: :ok
       end
 
       def update
+        # result = FindPatient.call({id: params[:id]})
         patient =  Patient.find(params[:id])
         if patient.update_attributes(patient_params)
           render json: {status: 'SUCCESS', message:'Updated Patient', data: patient},status: :ok
