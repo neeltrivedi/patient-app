@@ -13,12 +13,20 @@ module Api
       end
 
       def create
-        patient = Patient.new(patient_params)
+        # patient = Patient.new(patient_params)
+        #
+        # if patient.save
+        #   render json: {status: 'SUCCESS', message:'Saved Patient', data: patient},status: :ok
+        # else
+        #   render json: {status: 'ERROR', message:'Not able to save Patient', data: patient.errors},status: :unprocessable_entity
+        # end
 
-        if patient.save
-          render json: {status: 'SUCCESS', message:'Saved Patient', data: patient},status: :ok
+        result = CreatePatient.call(patient_params)
+
+        if result.success?
+          render json: {status: 'SUCCESS', message:'Saved Patient', data: result.patient},status: :ok
         else
-          render json: {status: 'ERROR', message:'Not able to save Patient', data: patient.errors},status: :unprocessable_entity
+          render json: {status: 'ERROR', message:'Not able to save Patient', data: result.patient.errors},status: :unprocessable_entity
         end
       end
 
