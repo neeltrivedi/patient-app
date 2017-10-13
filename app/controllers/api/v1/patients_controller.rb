@@ -2,8 +2,8 @@ module Api
   module V1
     class PatientsController < ApplicationController
       def index
-      	patients = Patient.all
-        render json: {status: 'SUCCESS', message:'Loaded Patients', data: patients},status: :ok
+        result = AllPatients.call()
+        render json: {status: 'SUCCESS', message:'Loaded Patients', data: result.patients},status: :ok
       end
 
       def show
@@ -28,7 +28,7 @@ module Api
         if delete_patient.success?
           render json: {status: 'SUCCESS', message:'Deleted Patient', data: delete_patient.delete_record},status: :ok
         end
-      end  
+      end
 
       def update
         # result = FindPatient.call({id: params[:id]})
@@ -44,7 +44,6 @@ module Api
       def patient_params
         params.require(:patient).permit(:first_name, :middle_name, :last_name, :weight, :height , :mrn)
       end
-
     end
   end
 end
