@@ -2,9 +2,9 @@ class CreatePatient
   include Interactor
 
   def call
-    patient = Patient.new(context.patient)
+    patient, success = PatientRepository.create_patient(context.patient) #Patient.new(context.patient)
 
-    if patient.save
+    if success
       context.patient = patient
     else
       context.fail!(message: "create_patient.faliure")
