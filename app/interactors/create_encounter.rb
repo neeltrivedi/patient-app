@@ -2,8 +2,9 @@ class CreateEncounter
   include Interactor
 
   def call
-    encounter = context.patient.encounters.create(context.encounter)
-    if encounter.save
+    encounter, success = EncounterRepository.create_encounter(context[:patient], context[:encounter])#context.patient.encounters.create(context.encounter)
+
+    if success
       context.encounter = encounter
     else
       context.fail!(message: "create_encounter.faliure")
