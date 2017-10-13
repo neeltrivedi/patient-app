@@ -5,7 +5,7 @@ class DeleteRecord
     if record = PatientRepository.delete_record(context.record) #context.record.destroy
       context.delete_record = record
     else
-      context.fail!(message: "delete_record.faliure")
+      context.fail!(message: "delete_record.failure")
     end
   end
 end

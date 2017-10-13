@@ -7,7 +7,7 @@ class CreatePatient
     if success
       context.patient = patient
     else
-      context.fail!(message: "create_patient.faliure")
+      context.fail!(message: "create_patient.failure")
     end
   end
 end

@@ -7,7 +7,7 @@ class CreateEncounter
     if success
       context.encounter = encounter
     else
-      context.fail!(message: "create_encounter.faliure")
+      context.fail!(message: "create_encounter.failure")
     end
   end
 end
