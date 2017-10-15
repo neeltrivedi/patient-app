@@ -23,8 +23,8 @@ ActiveRecord::Schema.define(version: 20170907010942) do
     t.string "room"
     t.integer "bed"
     t.bigint "patient_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.index ["patient_id"], name: "index_encounters_on_patient_id"
   end
 
@@ -35,8 +35,8 @@ ActiveRecord::Schema.define(version: 20170907010942) do
     t.string "last_name"
     t.integer "weight"
     t.integer "height"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_foreign_key "encounters", "patients"
