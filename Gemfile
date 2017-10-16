@@ -40,6 +40,7 @@ group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'minitest', '5.10.3'
   gem 'minitest-rails', '~> 3.0.0'
+  gem 'factory_girl_rails', '~> 4.7.0'
 end
 
 group :development do
