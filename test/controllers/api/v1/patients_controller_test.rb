@@ -6,10 +6,8 @@ module Api
     class PatientsControllerTest < ActionController::TestCase
         def setup
           super
-          @patient = patients(:one)
-          # @patient = FactoryGirl.create :patient
-          # p '============='
-          # p @patient
+          # @patient = patients(:one)
+          @patient = FactoryGirl.build :patient
         end
 
         test '#index' do
@@ -17,20 +15,20 @@ module Api
           assert_response :ok
         end
 
-        # test "#show" do
-        #   get :show, params: { id: @patient }
-        #   assert_response :ok
-        # end
-        #
-        # test "#create" do
-        #   post :create, params: { patient: @patient.attributes }
-        #   assert_response :ok
-        # end
-        #
-        # test "#destroy" do
-        #   delete :destroy, params: { id: @patient }
-        #   assert_response :ok
-        # end
+        test "#show" do
+          get :show, params: { id: @patient }
+          assert_response :ok
+        end
+
+        test "#create" do
+          post :create, params: { patient: @patient.attributes }
+          assert_response :ok
+        end
+
+        test "#destroy" do
+          delete :destroy, params: { id: @patient }
+          assert_response :ok
+        end
 
         # test "#edit" do
         #   put :update, params: { id: @patient, patient_params: @patient.attributes }

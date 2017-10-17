@@ -4,9 +4,10 @@ module Api
     class EncountersControllerTest < ActionController::TestCase
       def setup
         super
-        @patient = patients(:one)
-        @encounter = encounters(:one)
-        # @patient = FactoryGirl.create :patient
+        # @patient = patients(:one)
+        # @encounter = encounters(:one)
+        @patient = FactoryGirl.build :patient
+        @encounter = FactoryGirl.build :encounter
       end
 
       test "#index" do
