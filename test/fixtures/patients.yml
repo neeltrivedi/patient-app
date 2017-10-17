@@ -5,6 +5,7 @@
 # below each fixture, per the syntax in the comments below
 #
 one:
+  id: 1
   mrn: THC123
   first_name: James
   middle_name: John
