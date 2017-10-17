@@ -1,9 +1,12 @@
 require "test_helper"
 
-describe Encounter do
-  let(:encounter) { Encounter.new }
+class EncounterTest < ActiveSupport::TestCase
+  context '#validations' do
+    should validate_presence_of(:visit_number)
+    should validate_presence_of(:admitted_at)
+  end
 
-  # it "must be valid" do
-  #   value(encounter).must_be :valid?
-  # end
+  context '#association' do
+    should belong_to(:patient)
+  end
 end

@@ -1,9 +1,13 @@
 require "test_helper"
 
-describe Patient do
-  let(:patient) { Patient.new }
+class PatientTest < ActiveSupport::TestCase
+  context '#validations' do
+    should validate_presence_of(:first_name)
+    should validate_presence_of(:middle_name)
+    should validate_presence_of(:mrn)
+  end
 
-  # it "must be valid" do
-  #   value(patient).must_be :valid?
-  # end
+  context '#association' do
+    should have_many(:encounters)
+  end
 end
