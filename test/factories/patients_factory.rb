@@ -1,6 +1,5 @@
 FactoryGirl.define do
   factory :patient do
-    id 1
     mrn 'THC123'
     first_name 'James'
     middle_name 'John'
