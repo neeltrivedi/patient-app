@@ -3,8 +3,8 @@ require 'test_helper'
 class AllEncountersPatientTest < ActiveSupport::TestCase
   def setup
     super
-    @patient = patients(:one)
-    # @patient = FactoryGirl.create :patient
+    # @patient = patients(:one)
+    @patient = FactoryGirl.build :patient
   end
 
   test '#get all encounters of patient' do

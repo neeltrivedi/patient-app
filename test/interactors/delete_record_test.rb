@@ -3,9 +3,8 @@ require 'test_helper'
 class DeleteRecordTest < ActiveSupport::TestCase
   def setup
     super
-    @patient = patients(:one)
-    @encounter = encounters(:one)
-    # @patient = FactoryGirl.create :patient
+    @patient = FactoryGirl.create :patient
+    # @encounter = FactoryGirl.create :encounter, patient_id: @patient.id
   end
 
   test '#delete record' do

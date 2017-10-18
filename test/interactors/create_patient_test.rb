@@ -3,10 +3,8 @@ require 'test_helper'
 class CreatePatientTest < ActiveSupport::TestCase
   def setup
     super
-    # @patient = patients(:two)
-    # @encounter = encounters(:one)
-    # @patient = FactoryGirl.create :patient
-    @patient = {:id=>2000, :mrn=>"THC123", :first_name=>"James", :middle_name=>"John", :last_name=>"Smith"}
+    # @patient = {:id=>2000, :mrn=>"THC123", :first_name=>"James", :middle_name=>"John", :last_name=>"Smith"}
+    @patient = FactoryGirl.attributes_for :patient
   end
 
   test '#create patient' do
