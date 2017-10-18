@@ -7,7 +7,8 @@ module Api
         def setup
           super
           # @patient = patients(:one)
-          @patient = FactoryGirl.build :patient
+          @patient = FactoryGirl.create :patient
+          @patient_1 = FactoryGirl.attributes_for :patient
         end
 
         test '#index' do
@@ -21,7 +22,7 @@ module Api
         end
 
         test "#create" do
-          post :create, params: { patient: @patient.attributes }
+          post :create, params: { patient: @patient_1 }
           assert_response :ok
         end
 
