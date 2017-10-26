@@ -42,6 +42,7 @@ group :development, :test do
   gem 'minitest-rails', '~> 3.0.0'
   gem 'factory_girl_rails', '~> 4.7.0'
   gem 'shoulda', '~> 3.5.0'
+  gem 'faker', '~> 1.5.0'
 end
 
 group :development do
