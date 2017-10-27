@@ -13,8 +13,10 @@ import Header from './Header'
 const renderTextField = ({
   input,
   label,
+  data
 }) =>
-  <Input type="text" name={label} id={label} placeholder={label} {...input}/>
+  <Input type="text" name={label} id={label} placeholder={label} {...input} value={data}/>
+
 
 class PatientsDisplay extends React.Component {
   constructor(props) {
@@ -24,11 +26,14 @@ class PatientsDisplay extends React.Component {
       patients: [],
       visible: false,
       deletePatient: false,
-      isLoading: true
+      isLoading: true,
+      modal1: false,
+      editPatient: []
     };
 
     this.toggle = this.toggle.bind(this);
     this.onDismiss = this.onDismiss.bind(this);
+    this.toggle1 = this.toggle1.bind(this);
   }
 
   toggle() {
@@ -42,6 +47,14 @@ class PatientsDisplay extends React.Component {
       visible: false,
       deletePatient: false
    });
+  }
+
+  toggle1(row) {
+    // console.log('test',row);
+    this.setState({
+      modal1: !this.state.modal1,
+      editPatient: row
+    });
   }
 
   fetchPatients (id) {
@@ -88,11 +101,54 @@ class PatientsDisplay extends React.Component {
         });
   }
 
+  handleEdit = (e, row) => {
+    e.preventDefault();
+    this.edit(row);
+  }
+
+  edit= (data) => {
+    console.log('edit',data);
+  }
+
   buttonFormatter(cell, row){
+    const { handleSubmit, onChange } = this.props;
     return(
       <div>
         <Link to={`/patients/${row.id}`}><Button color="primary">Show</Button></Link>{' '}
-        <Button color="warning">Edit</Button>{' '}
+        <Button color="warning" onClick={(e) => this.toggle1(row)}>Edit</Button>{' '}
+        <Modal isOpen={this.state.modal1} toggle={this.toggle1} className={this.props.className} style={styles.modal}>
+          <ModalHeader toggle={this.toggle1}>
+            Edit Patient
+          </ModalHeader>
+          <Form onSubmit={ handleSubmit(this.edit.bind(this)) }>
+            <FormGroup>
+              <ModalBody>
+                    <Label for="mrn">MRN</Label>
+                    <Field name="mrn" component={renderTextField} label="MRN" data={this.state.editPatient.mrn} />
+                    {/* <Input type="text" name="mrn" id="mrn" placeholder="MRN" defaultValue={this.state.editPatient.mrn} /> */}
+                    <Label for="f_name">First Name</Label>
+                    {/* <Field name="first_name" component={renderTextField} label="First Name" /> */}
+                    <Input type="text" name="f_name" id="f_name" placeholder="First Name" defaultValue={this.state.editPatient.first_name}/>
+                    <Label for="m_name">Middle Name</Label>
+                    {/* <Field name="middle_name" component={renderTextField} label="Middle Name" /> */}
+                    <Input type="text" name="m_name" id="m_name" placeholder="Middle Name" defaultValue={this.state.editPatient.middle_name}/>
+                    <Label for="l_name">Last Name</Label>
+                    {/* <Field name="last_name" component={renderTextField} label="Last Name" /> */}
+                    <Input type="text" name="l_name" id="l_name" placeholder="Last Name" defaultValue={this.state.editPatient.last_name}/>
+                    <Label for="weight">Weight</Label>
+                    {/* <Field name="weight" component={renderTextField} label="Weight" /> */}
+                    <Input type="text" name="weight" id="weight" placeholder="Weight" defaultValue={this.state.editPatient.weight}/>
+                    <Label for="height">Height</Label>
+                    {/* <Field name="height" component={renderTextField} label="Height" /> */}
+                    <Input type="text" name="height" id="height" placeholder="Height" defaultValue={this.state.editPatient.height}/>
+              </ModalBody>
+              <ModalFooter>
+                <Button color="primary" type="submit">Add</Button>{' '}
+                <Button color="secondary" onClick={this.toggle1}>Cancel</Button>
+              </ModalFooter>
+            </FormGroup>
+          </Form>
+        </Modal>
         <Button color="danger" onClick={(e) => this.handleClick(e, row)}>Destroy</Button>{' '}
       </div>
     )
